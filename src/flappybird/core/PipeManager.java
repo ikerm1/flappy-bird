@@ -3,6 +3,7 @@ package flappybird.core;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Manages the list of pipe pairs (top + bottom) in the game.
@@ -30,7 +31,7 @@ public class PipeManager {
     public void spawnInitial(int gapY, int gapSize) {
         pipes.clear();
         lastScoredPipe = null;
-        addPipePair(gapY, gapSize);
+        addPipePair(randomGapY(gapSize), gapSize);
     }
 
     /** Called every game tick. Moves pipes, spawns new ones, removes off-screen ones. */
@@ -56,11 +57,13 @@ public class PipeManager {
 
     /** Spawn a new pipe pair with a randomised gap. */
     private void spawnRandomPair() {
-        int maxGapY = groundHeight - PIPE_GAP - 200;
-        int minGapY = 100;
-        int gapY = (int) (Math.random() * (maxGapY - minGapY)) + minGapY;
+        addPipePair(randomGapY(PIPE_GAP), PIPE_GAP);
+    }
 
-        addPipePair(gapY, PIPE_GAP);
+    private int randomGapY(int gapSize) {
+        int minGapY = 100;
+        int maxGapY = groundHeight - gapSize - 200;
+        return ThreadLocalRandom.current().nextInt(minGapY, maxGapY + 1);
     }
 
     /** Add pipes whose bodies meet the top and the ground exactly. */
