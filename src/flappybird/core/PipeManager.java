@@ -15,7 +15,7 @@ public class PipeManager {
 
     // Configuration
     public static final int PIPE_WIDTH  = 80;
-    public static final int PIPE_HEIGHT = 500;
+    public static final int PIPE_GAP    = 220;
     public static final int PIPE_SPEED  = 6;
 
     private final int screenWidth;
@@ -30,8 +30,7 @@ public class PipeManager {
     public void spawnInitial(int gapY, int gapSize) {
         pipes.clear();
         lastScoredPipe = null;
-        pipes.add(new Pipe(screenWidth, gapY - PIPE_HEIGHT, PIPE_WIDTH, PIPE_HEIGHT));
-        pipes.add(new Pipe(screenWidth, gapY + gapSize,     PIPE_WIDTH, PIPE_HEIGHT));
+        addPipePair(gapY, gapSize);
     }
 
     /** Called every game tick. Moves pipes, spawns new ones, removes off-screen ones. */
@@ -57,17 +56,19 @@ public class PipeManager {
 
     /** Spawn a new pipe pair with a randomised gap. */
     private void spawnRandomPair() {
-        // 70% easy gap, 30% hard gap
-        int gapSize = (Math.random() < 0.7)
-                ? (int) (Math.random() * 80)  + 200   // easy: 200–280
-                : (int) (Math.random() * 30)  + 100;  // hard: 100–130
-
-        int maxGapY = groundHeight - gapSize - 200;
+        int maxGapY = groundHeight - PIPE_GAP - 200;
         int minGapY = 100;
         int gapY = (int) (Math.random() * (maxGapY - minGapY)) + minGapY;
 
-        pipes.add(new Pipe(screenWidth, gapY - PIPE_HEIGHT, PIPE_WIDTH, PIPE_HEIGHT));
-        pipes.add(new Pipe(screenWidth, gapY + gapSize,     PIPE_WIDTH, PIPE_HEIGHT));
+        addPipePair(gapY, PIPE_GAP);
+    }
+
+    /** Add pipes whose bodies meet the top and the ground exactly. */
+    private void addPipePair(int gapY, int gapSize) {
+        int bottomPipeY = gapY + gapSize;
+        pipes.add(new Pipe(screenWidth, 0, PIPE_WIDTH, gapY));
+        pipes.add(new Pipe(screenWidth, bottomPipeY, PIPE_WIDTH,
+                groundHeight - bottomPipeY));
     }
 
     /**

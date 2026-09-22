@@ -1,5 +1,9 @@
 package flappybird.ui;
 
+import flappybird.audio.SoundManager;
+import flappybird.core.Bird;
+import flappybird.core.GameState;
+import flappybird.core.PipeManager;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -13,15 +17,9 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.InputStream;
-
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
-
-import flappybird.audio.SoundManager;
-import flappybird.core.Bird;
-import flappybird.core.GameState;
-import flappybird.core.PipeManager;
 
 /**
  * The main game panel. Handles all rendering and the game loop.
@@ -135,7 +133,7 @@ public class GamePanel extends JPanel {
         bird = new Bird(screenWidth / 8, screenHeight / 2, 45, birdImage);
         pipeManager = new PipeManager(screenWidth, groundHeight);
         int gapY = screenHeight / 2 - 100;
-        pipeManager.spawnInitial(gapY, 200);
+        pipeManager.spawnInitial(gapY, PipeManager.PIPE_GAP);
     }
 
     private void initUI() {
@@ -195,7 +193,7 @@ public class GamePanel extends JPanel {
         score = 0;
         bird.reset(screenHeight / 2);
         int gapY = screenHeight / 2 - 100;
-        pipeManager.spawnInitial(gapY, 200);
+        pipeManager.spawnInitial(gapY, PipeManager.PIPE_GAP);
         currentState = GameState.PLAYING;
     }
 
