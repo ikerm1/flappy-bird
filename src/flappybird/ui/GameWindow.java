@@ -1,9 +1,8 @@
 package flappybird.ui;
 
 import flappybird.audio.SoundManager;
-
-import javax.swing.*;
 import java.io.File;
+import javax.swing.*;
 
 /**
  * The main application window.
@@ -16,7 +15,7 @@ public class GameWindow {
         String assetsPath = resolveAssetsPath();
 
         SoundManager soundManager = new SoundManager(assetsPath);
-        soundManager.play(SoundManager.BGM_MENU, true);
+        soundManager.play(SoundManager.BGM_MENU, false);
 
         GamePanel panel = new GamePanel(assetsPath, soundManager);
 
